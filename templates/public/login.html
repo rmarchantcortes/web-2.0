@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <title>Adopta.lo</title>
+
+        <!-- CSS  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="{{ url_for('static', filename='bower_components/Materialize/dist/css/materialize.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link href="{{ url_for('static', filename='css/style.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link href="{{ url_for('static', filename='css/login_style.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    </head>
+    <body class="valign-wrapper">
+        <div class="row valign">
+            <div class="card-panel hoverable col s8 offset-s1">
+                <form>
+                    <div class="input-field col s12">
+                        <input name="email" type="text" class="validate">
+                        <label for="email">Correo</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input name="password" type="password" class="validate">
+                        <label for="password">Contraseña</label>
+                    </div>  
+                    <button class="btn waves-effect waves-light green darken-2 center-align" type="submit" id="login">Ingresar
+                        <i class="material-icons right">send</i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!--  Scripts-->
+        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="{{ url_for('static', filename='bower_components/Materialize/dist/js/materialize.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/url.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/jsSHA/src/sha.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/public/login.js') }}"></script>
+    </body>
+</html>

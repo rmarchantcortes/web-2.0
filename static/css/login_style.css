@@ -1,0 +1,11 @@
+html, body{
+    min-height: 100%;
+}
+body {
+    background: url('/static/images/happy-dog-and-cat.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.card-panel form{
+    margin: 12px;
+}
