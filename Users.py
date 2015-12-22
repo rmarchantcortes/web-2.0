@@ -39,7 +39,7 @@ def get_users():
             else:
                 return "error"
 
-@users.route('/users/create/', methods = ['GET'])
+@users.route('/users/new/', methods = ['GET'])
 def create_user():
     return render_template('public/create_user.html', script = ['bower_components/jsSHA/src/sha.js','js/public/create_user.js'])
 
@@ -65,7 +65,7 @@ def user_login():
             data = select("SELECT use_salt FROM user WHERE use_email = '%s'" % (email))
             if len(data) > 0:
                 hashed_pass = get_hash(password, data[0]['use_salt'])
-                user = select("SELECT use_id, use_user_type FROM user WHERE use_email = '%s' AND use_password = '%s'" % (email, hashed_pass))
+                user = select("SELECT use_id, use_user_type FROM user WHERE use_email = '%s' AND use_password = '%s' and use_user_state = 1" % (email, hashed_pass))
                 if len(user) > 0:
                     set_session(set_token(user[0]['use_id'], user[0]['use_user_type']))
                     return format_json("")
@@ -80,6 +80,29 @@ def user_logout():
     unset_session()
     return redirect(url_for('pets.get_pets'))
 
-@users.route('/users/profile')
+@users.route('/users/me/profile')
 def user_profile():
-    return render_template()
+    if validate(get_token()):
+        user = select("SELECT use_name, use_user_type, use_email, use_phone_number, use_state_id FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+        return render_template('private/profile.html', user = user)
+    else:
+        return render_template('errors/403.html')
+
+@users.route('/users/me/adoptions')
+def user_adoptions():
+    if validate(get_token()):
+        user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+        adoptions = select("SELECT use_name, pet_name, ast_detail FROM pet, user, adoption, adoption_state WHERE use_id = ado_user_request and pet_id = ado_pet_id and ast_id = ado_state ORDER BY ado_updated DESC")
+        return render_template('private/myadoptions.html', user = user, adoptions = adoptions)
+    else:
+        return render_template('errors/403.html')
+
+@users.route('/users/me/pets')
+def user_pets():
+    if validate(get_token()):
+        user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+        pets = select("SELECT * FROM pet WHERE pet_user_id = %i" % (get_user_id(get_token())))
+        return render_template('private/mypets.html', user = user, pets = pets)
+    else:
+        return render_template('errors/403.html')
+

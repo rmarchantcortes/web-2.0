@@ -17,11 +17,14 @@ pets = Blueprint('pets', __name__)
 def get_pets():
     if request.method == 'GET':
         data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name FROM user, pet WHERE pet_state = 2 and pet_user_id = use_id")
-        if validate(get_token()):
-            user = select("SELECT use_name FROM user WHERE use_id = %s" % (get_user_id(get_token())))
         if request_wants_json():
             return format_json(data)
-        return render_template('index.html', user = user)
+        else:
+            if validate(get_token()):
+                user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+                return render_template('index.html', user = user)
+            else:
+                return render_template('index.html')
     else:
         return "POST"
 
