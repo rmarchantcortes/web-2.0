@@ -1,4 +1,28 @@
 {% extends "template.html" %}
 {% block wrapper %}
-    HOLAAAAAAAAA
+<div  class="col s12">
+	<form name="search">
+		<div id="selects"class="col s4">
+			<select name="country">
+			</select>
+
+			<select name="state">
+			</select>
+		</div >
+		<div id="checkboxes" class="col s4">
+
+		</div>
+		<div id="breeds" class="col s4">
+			<imput type="text" name="breed">
+			<label for="breed">
+		</div>
+		<div class="col s12">
+			<input type="submit" value="Buscar">
+		</div>
+	</form>
+</div>
+<div id="see-pets">
+
+</div>
 {% endblock %}
+
