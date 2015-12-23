@@ -1,8 +1,29 @@
 {% extends "template.html" %}
 {% block wrapper %}
-<div class="row">
-    <form class="col s12">
-    </form>
+<div class="container">
+    <div class="row">
+        <h5 class="left">Mis mascotas en adopción</h5>
+        <a class="waves-effect waves-light btn right" href="{{ url_for('pets.new_pet') }}"><i class="material-icons left">pets</i> Agregar mascota</a>
+    </div>
+    <ul class="collection">
+        {% for pet in pets %}
+        
+        <li class="collection-item avatar">
+            <img src="{% if pet['pet_image'] %} {{ url_for('static', filename='images/'+pet['pet_image']) }} {% endif %}" alt="" class="circle">
+            <span class="title">{{ pet['pet_name'] }} - </span>
+            <span class="state">{{ pet['pst_detail'] }}</span>
+            <p>{{ pet['pty_detail'] }} - Raza {{ pet['pet_race'] }}<br>
+                {{ pet['pet_details'] }}
+            </p>
+            <div class="secondary-content">
+                <a href="{{ url_for('pets.edit_pet', pet_id=pet['pet_id']) }}"><i class="material-icons">edit</i></a>
+                <a href="#!"><i class="material-icons">delete</i></a>
+            </div>
+            
+        </li>
+        
+        {% endfor %}
+    </ul>
 </div>
 
 {% endblock %}

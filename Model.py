@@ -27,3 +27,4 @@ def update(sql):
     cursor.execute(sql)
     con.commit()
     cursor.close()
+    return cursor.rowcount

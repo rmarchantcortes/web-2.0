@@ -41,8 +41,11 @@ def get_users():
 
 @users.route('/users/new/', methods = ['GET'])
 def create_user():
-    return render_template('public/create_user.html', script = ['bower_components/jsSHA/src/sha.js','js/public/create_user.js'])
-
+    if not validate(get_token()):
+        return render_template('public/create_user.html', script = ['bower_components/jsSHA/src/sha.js','js/public/create_user.js'])
+    else:
+        return render_template('errors/400.html')
+        
 @users.route('/users/types/')
 def get_user_types():
     data = select("SELECT uty_id, uty_detail FROM user_type")
@@ -91,18 +94,24 @@ def user_profile():
 @users.route('/users/me/adoptions')
 def user_adoptions():
     if validate(get_token()):
-        user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
         adoptions = select("SELECT use_name, pet_name, ast_detail FROM pet, user, adoption, adoption_state WHERE use_id = ado_user_request and pet_id = ado_pet_id and ast_id = ado_state ORDER BY ado_updated DESC")
-        return render_template('private/myadoptions.html', user = user, adoptions = adoptions)
+        if request_wants_json():
+            return format_json(adoptions)
+        else:
+            user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+            return render_template('private/myadoptions.html', user = user, adoptions = adoptions)
     else:
         return render_template('errors/403.html')
 
 @users.route('/users/me/pets')
 def user_pets():
     if validate(get_token()):
-        user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
-        pets = select("SELECT * FROM pet WHERE pet_user_id = %i" % (get_user_id(get_token())))
-        return render_template('private/mypets.html', user = user, pets = pets)
+        pets = select("SELECT pet_id, pet_name, pet_user_id, pet_age, pet_state, pst_detail, pty_detail, pet_race, pet_created, pet_updated, pet_description, (SELECT pim_url FROM pet_image WHERE pim_pet_id = pet_id LIMIT 1) as pet_image FROM pet, pet_state, pet_type WHERE pet_user_id = %i AND pet_state = pst_id AND pet_type = pty_id" % (get_user_id(get_token())))
+        if request_wants_json():
+            return format_json(pets)
+        else:
+            user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+            return render_template('private/mypets.html', user = user, pets = pets)
     else:
         return render_template('errors/403.html')
 
