@@ -42,6 +42,10 @@ def get_pets():
         else:
             return format_json(name, 400)
 
+def set_select():#por mientras
+    count = get_countries();
+        return render_template('index.html', count=count)
+
 @pets.route('/pets/<int:pet_id>/', methods = ['GET', 'PUT', 'DELETE'])
 def get_pet(pet_id):
     if request.method == 'GET':

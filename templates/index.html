@@ -1,22 +1,32 @@
 {% extends "template.html" %}
 {% block wrapper %}
-<div  class="col s12">
-	<form name="search">
-		<div id="selects"class="col s4">
+<div >
+	<form name="search" class="row">
+		<div id="selects" class="col s4 text-darken-2">
 			<select name="country">
+				{% for co in country_combo %}
+                <option name="{{ count }}" SELECTED>{{ count }}</option>
+                {% endfor %}
 			</select>
-
+                <option name="asd" SELECTED>asd</option>
 			<select name="state">
 			</select>
 		</div >
-		<div id="checkboxes" class="col s4">
-
+		<div id="checkboxes" class="col s4 text-darken-2">
+			<input type="checkbox" name="dog" class="row " />
+      		<label for="dog" >Perro</label>
+      		<input type="checkbox" name="cat" class="row " />
+      		<label for="cat">Gato</label>
+      		<input type="checkbox" name="rabbit" class="row " />
+      		<label for="rabbit">Conejo</label>
+      		<input type="checkbox" name="sheep" class="row " />
+      		<label for="sheep">Oveja</label>
 		</div>
-		<div id="breeds" class="col s4">
-			<imput type="text" name="breed">
-			<label for="breed">
+		<div id="breeds" class="col s4 text-darken-2">
+			<label for="breed">Raza</label>
+			<input type="text" name="breed"/>
 		</div>
-		<div class="col s12">
+		<div class="col s12 text-darken-2">
 			<input type="submit" value="Buscar">
 		</div>
 	</form>
