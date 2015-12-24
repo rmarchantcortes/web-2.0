@@ -8,6 +8,9 @@ from Response import (
     format_json,
     request_wants_json
 )
+from Countries import (
+    get_countries
+)
 from flask import(
     request,
     render_template
@@ -21,6 +24,8 @@ pets = Blueprint('pets', __name__)
 @pets.route('/pets/', methods = ['GET', 'POST'])
 def get_pets():
     if request.method == 'GET':
+        set_select()
+
         data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name FROM user, pet WHERE pet_state = 2 and pet_user_id = use_id")
         if request_wants_json():
             return format_json(data)
@@ -44,7 +49,7 @@ def get_pets():
 
 def set_select():#por mientras
     count = get_countries();
-        return render_template('index.html', count=count)
+    return render_template('index.html', count=count)
 
 @pets.route('/pets/<int:pet_id>/', methods = ['GET', 'PUT', 'DELETE'])
 def get_pet(pet_id):

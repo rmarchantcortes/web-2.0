@@ -2,25 +2,42 @@
 {% block wrapper %}
 <div >
 	<form name="search" class="row">
-		<div id="selects" class="col s4 text-darken-2">
-			<select name="country">
-				{% for co in country_combo %}
-                <option name="{{ count }}" SELECTED>{{ count }}</option>
-                {% endfor %}
+		<div id="selects" class="col s4">
+            <label>Elije tu pais</label>
+			<select class="browser-default" name="country">
+			    <option value="" disabled selected>Pais</option>
+			    {% for co in counte %}
+			    <option value="1">Option 1</option>
+			    {% endfor %}
+			</select>    
+			<label>Elije tu ciudad</label>
+			<select class="browser-default" name="state">
+			    <option value="" disabled selected>Ciudad</option>
+			    <option value="1">Option 1</option>
+			    <option value="2">Option 2</option>
+			    <option value="3">Option 3</option>
 			</select>
-                <option name="asd" SELECTED>asd</option>
-			<select name="state">
-			</select>
+            
+
 		</div >
 		<div id="checkboxes" class="col s4 text-darken-2">
-			<input type="checkbox" name="dog" class="row " />
-      		<label for="dog" >Perro</label>
-      		<input type="checkbox" name="cat" class="row " />
-      		<label for="cat">Gato</label>
-      		<input type="checkbox" name="rabbit" class="row " />
-      		<label for="rabbit">Conejo</label>
-      		<input type="checkbox" name="sheep" class="row " />
-      		<label for="sheep">Oveja</label>
+			<div class="row">
+
+				<div class="col s4">
+					<input type="checkbox" name="dog" class="row " />
+	      			<label for="dog" >Perro</label>
+	      			<input type="checkbox" name="cat" class="row " />
+	      			<label for="cat">Gato</label>
+				</div>
+				<div class="col s4">
+					<input type="checkbox" name="rabbit" class="row " />
+	      			<label for="rabbit">Conejo</label>
+					<input type="checkbox" name="sheep" class="row " />
+	      			<label for="sheep">Oveja</label>
+				</div>
+				
+			</div>
+
 		</div>
 		<div id="breeds" class="col s4 text-darken-2">
 			<label for="breed">Raza</label>
