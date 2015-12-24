@@ -1,6 +1,9 @@
 #wrapper{
     padding-top: 30px;
 }
+.clear{
+    clear: both;
+}
 /* label color */
 .input-field label {
     color: #000;
@@ -27,4 +30,35 @@
 /* icon prefix focus color */
 .input-field .prefix.active {
     color: #000;
+}
+.image-container-label{
+    margin-left: 11px;
+    margin-bottom: 11px;
+    color: black;
+}
+.image-container{
+    border: solid 1px #9E9E9E;
+    min-height: 150px;
+    margin-left: 11px;
+    margin-right: 11px;
+    position: relative;
+}
+.image-container .btn-floating {
+    height: 37px;
+}
+.image-container .file-field{
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+}
+.image-item{
+    margin: 5px;
+    height: 140px;
+    width: 140px;
+    background-position: center;
+    background-size: cover;
+}
+.collection .collection-item.avatar .title{
+    font-size: 18px;
+    font-weight: bold;
 }

@@ -14,17 +14,33 @@
         <nav class="blue" role="navigation">
             <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Adopta.lo</a>
                 <ul class="right hide-on-med-and-down">
-                    <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown1'>Drop Me!</a>
+                    {% if user %}
                     <li>
-                        <ul id='dropdown1' class='dropdown-content'>
-                            <li><a href="#!">onesadsadsadasdsadsadsadas</a></li>
-                            <li><a href="#!">two</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#!">three</a></li>
-                        </ul>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown1'> {{ user[0]['use_name'] }}</a>
+                        <li>
+                            <ul id='dropdown1' class='dropdown-content'>
+                                <li><a href="{{ url_for('users.user_profile') }}">Mi perfil</a></li>
+                                <li><a href="{{ url_for('users.user_pets') }}">Mis mascotas</a></li>
+                                <li><a href="{{ url_for('users.user_adoptions') }}">Mis adopciones</a></li>
+                                <li><a href="{{ url_for('users.user_logout') }}">Salir</a></li>
+                            </ul>
+                        </li>
                     </li>
+                    {% if user[0]['use_user_type'] < 3 %}
+                    <li>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown2'>Administración</a>
+                        <li>
+                            <ul id='dropdown2' class='dropdown-content'>
+                                <li><a href="{{ url_for('users.user_profile') }}">Usuarios</a></li>
+                                <li><a href="{{ url_for('users.user_pets') }}">Otro</a></li>
+                            </ul>
+                        </li>
+                    </li>
+                    {% endif %}
+                    {% else %}
+                    <li><a href="{{ url_for('users.user_login') }}">Ingresar</a></li>
+                    {% endif %}
                 </ul>
-
                 <ul id="nav-mobile" class="side-nav">
                     <li><a href="#">Navbar Link</a></li>
                 </ul>
@@ -33,7 +49,7 @@
         </nav>
 
 
-        <div class="container" id="wrapper">
+        <div class="container-fluid" id="wrapper">
             {% block wrapper %}{% endblock %}
         </div>
 

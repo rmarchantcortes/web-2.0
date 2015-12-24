@@ -1,0 +1,56 @@
+{% extends "template.html" %}
+{% block wrapper %}
+<div class="container">
+    <div class="row">
+        <h5><i class="material-icons prefix">pets</i> Editar a {{ pet[0]['pet_name']}} </h5>
+    </div>
+    <form name="pet-details" class="col s12">
+        <div class="row">
+            <div class="input-field col s6">
+                <input name="name" type="text" class="validate" value="{{ pet[0]['pet_name'] }}">
+                <label for="name">Nombre de la mascota</label>
+            </div>
+            <div class="input-field col s6">
+                <input name="age" type="text" class="validate" value="{{ pet[0]['pet_age']}}">
+                <label for="age">Edad de la mascota</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <select name="type" selection="{{ pet[0]['pet_type'] }}">
+                    <option value="" disabled>Especie</option>
+                </select>
+                <label for="type">Especie</label>
+            </div>
+            <div class="input-field col s6">
+                <input name="race" type="text" class="validate" value="{{ pet[0]['pet_race']}}">
+                <label for="race">Raza</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea name="description" class="materialize-textarea">{{ pet[0]['pet_description']}}</textarea>
+                <label for="description">Descripción</label>
+            </div>
+        </div>
+    </form>
+    <form name="pet-image">
+        <div class="row">
+            <label class="image-container-label">Imágenes</label>            
+            <div class="image-container">
+                <div class="file-field input-field">
+                    <div class="btn btn-floating waves-effect waves-light blue">
+                        <span class=""><i class="material-icons">add</i></span>
+                        <input type="file" name="file">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </form>
+    <button class="btn waves-effect waves-light green darken-2 right" type="submit" id="publish-pet">{% if pet[0]['pet_state'] == 1 %} Publicar {% else %} Aceptar {% endif %}
+        <i class="material-icons right">send</i>
+    </button>
+    <div class="clear" id="data" pet_id="{{ pet[0]['pet_id']}}"></div>
+</div>
+{% endblock %}
