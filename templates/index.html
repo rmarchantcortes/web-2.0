@@ -1,8 +1,8 @@
 {% extends "template.html" %}
 {% block wrapper %}
 <div >
-	<form name="search" class="row">
-		<div id="selects" class="col s4">
+	<form name="search" class="row z-depth-1">
+		<div id="selects" class="col s4 " >
             <label>Elije tu pais</label>
 			<select class="browser-default" name="country">
 			    <option value="" disabled selected>Pais</option>
@@ -20,26 +20,35 @@
             
 
 		</div >
-		<div id="checkboxes" class="col s4 text-darken-2">
+		<div id="checkboxes" class="col s4 ">
 			<div class="row">
-
+				<br>
 				<div class="col s4">
-					<input type="checkbox" name="dog" class="row " />
+					<p>
+					<input type="checkbox" id="dog" class="row "/>
 	      			<label for="dog" >Perro</label>
-	      			<input type="checkbox" name="cat" class="row " />
+	      			</p>
+	      			<p>
+	      			<input type="checkbox" id="cat" class="row "/>
 	      			<label for="cat">Gato</label>
+	      			</p>
 				</div>
 				<div class="col s4">
-					<input type="checkbox" name="rabbit" class="row " />
+					<p>
+					<input type="checkbox" id="rabbit" class="row "/>
 	      			<label for="rabbit">Conejo</label>
-					<input type="checkbox" name="sheep" class="row " />
+	      			</p>
+	      			<p>
+					<input type="checkbox" id="sheep" class="row "/>
 	      			<label for="sheep">Oveja</label>
+	      			</p>
 				</div>
 				
 			</div>
 
 		</div>
-		<div id="breeds" class="col s4 text-darken-2">
+		<div id="breeds" class="col s4 ">
+			<br>
 			<label for="breed">Raza</label>
 			<input type="text" name="breed"/>
 		</div>
@@ -49,7 +58,25 @@
 	</form>
 </div>
 <div id="see-pets">
-
+	{% for i in cards %}
+	<div class="row" style="width: 600px; height: 800px">
+        <div class="col s4 m7">
+          	<div class="card">
+	            <div class="card-image">
+		            <img src="static/images/4_perrita_manchas.jpg">
+		            <span class="card-title">Card Title</span>
+	            </div>
+	            <div class="card-content">
+	              	<p>{{ descripcion }}</p>
+	            </div>
+	            <div class="card-action">
+	              	<a href="#">This is a link</a>
+	            </div>
+          	</div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}
 
+=
