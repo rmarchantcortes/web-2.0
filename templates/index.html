@@ -6,8 +6,8 @@
             <label>Elije tu pais</label>
 			<select class="browser-default" name="country">
 			    <option value="" disabled selected>Pais</option>
-			    {% for co in counte %}
-			    <option value="1">Option 1</option>
+			    {% for data in countries %}
+			    	<option name="{{ data['cou_id'] }}" value="{{ data['cou_name'] }}">{{ data['cou_name'] }}</option>
 			    {% endfor %}
 			</select>    
 			<label>Elije tu ciudad</label>
@@ -47,7 +47,7 @@
 			</div>
 
 		</div>
-		<div id="breeds" class="col s4 ">
+		<div id="breeds" class="input-field col s4 ">
 			<br>
 			<label for="breed">Raza</label>
 			<input type="text" name="breed"/>
@@ -58,7 +58,7 @@
 	</form>
 </div>
 <div id="see-pets">
-	{% for i in cards %}
+	{% for i in pets %}
 	<div class="row" style="width: 600px; height: 800px">
         <div class="col s4 m7">
           	<div class="card">

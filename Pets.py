@@ -24,7 +24,7 @@ pets = Blueprint('pets', __name__)
 @pets.route('/pets/', methods = ['GET', 'POST'])
 def get_pets():
     if request.method == 'GET':
-        set_select()
+        #set_select()
 
         data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name FROM user, pet WHERE pet_state = 2 and pet_user_id = use_id")
         if request_wants_json():

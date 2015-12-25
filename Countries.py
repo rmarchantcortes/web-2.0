@@ -14,7 +14,8 @@ countries = Blueprint('countries', __name__)
 @countries.route('/countries/', methods = ['GET'])
 def get_countries():
     data = select("SELECT * FROM country")
-    return format_json(data)
+    #return format_json(data)
+    return render_template('index.html', data = data)
 
 @countries.route('/countries/<int:country_id>/', methods = ['GET'])
 def get_country(country_id):
