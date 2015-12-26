@@ -86,7 +86,7 @@ def user_logout():
 @users.route('/users/me/profile')
 def user_profile():
     if validate(get_token()):
-        user = select("SELECT use_name, use_user_type, use_email, use_phone_number, use_state_id FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+        user = select("SELECT u.use_name, u.use_user_type, u.use_email, u.use_phone_number, s.sta_name, t.uty_detail, c.cou_name FROM user u, state s, user_type t, country c WHERE c.cou_id=s.sta_country_id AND t.uty_id=u.use_user_type AND u.use_state_id=s.sta_id AND u.use_id = %s" % (get_user_id(get_token())))
         return render_template('private/profile.html', user = user)
     else:
         return render_template('errors/403.html')
