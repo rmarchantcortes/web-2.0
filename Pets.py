@@ -24,17 +24,15 @@ pets = Blueprint('pets', __name__)
 @pets.route('/pets/', methods = ['GET', 'POST'])
 def get_pets():
     if request.method == 'GET':
-        #set_select()
-
-        data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name FROM user, pet WHERE pet_state = 2 and pet_user_id = use_id")
+        data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name, (SELECT pim_url FROM pet_image WHERE pim_pet_id = pet_id LIMIT 1) as pet_image FROM user, pet WHERE pet_state = 2 and pet_user_id = use_id")
         if request_wants_json():
             return format_json(data)
         else:
             if validate(get_token()):
                 user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
-                return render_template('index.html', user = user)
+                return render_template('index.html', user = user, script = ['js/public/index.js'], pets = data)
             else:
-                return render_template('index.html')
+                return render_template('index.html', script = ['js/public/index.js'], pets = data)
     else:
         name = request.form['name']
         age = request.form['age']
