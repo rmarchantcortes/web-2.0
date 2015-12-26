@@ -1,4 +1,9 @@
-from flask import Blueprint, current_app
+from flask import(
+    Blueprint,
+    current_app,
+    redirect,
+    url_for
+)
 from Model import(
     select,
     insert,
@@ -18,21 +23,29 @@ from flask import(
 from Auth import *
 import os
 
+from math import ceil
+
 pets = Blueprint('pets', __name__)
+
+ITEMS_PER_PAGE = 20
 
 @pets.route('/')
 @pets.route('/pets/', methods = ['GET', 'POST'])
-def get_pets():
+@pets.route('/pets/page/<int:page>/', methods = ['GET'])
+def get_pets(page = 0):
     if request.method == 'GET':
-        data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name, (SELECT pim_url FROM pet_image WHERE pim_pet_id = pet_id LIMIT 1) as pet_image FROM user, pet WHERE pet_state = 2 and pet_user_id = use_id")
+        data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name, pet_description, (SELECT pim_url FROM pet_image WHERE pim_pet_id = pet_id LIMIT 1) as pet_image FROM user, pet WHERE pet_state = 2 and pet_user_id = use_id ORDER BY pet_id DESC LIMIT %i,%i" % (page*ITEMS_PER_PAGE, ITEMS_PER_PAGE))
+        total = int(ceil(select("SELECT count(pet_id) as total FROM pet")[0]['total']/ITEMS_PER_PAGE))
+        if page > total:
+            return redirect(url_for('pets.get_pets'))
         if request_wants_json():
             return format_json(data)
         else:
             if validate(get_token()):
                 user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
-                return render_template('index.html', user = user, script = ['js/public/index.js'], pets = data)
+                return render_template('index.html', user = user, script = ['js/public/index.js'], pets = data, total = total, page = page)
             else:
-                return render_template('index.html', script = ['js/public/index.js'], pets = data)
+                return render_template('index.html', script = ['js/public/index.js'], pets = data, total = total, page = page)
     else:
         name = request.form['name']
         age = request.form['age']

@@ -13,7 +13,7 @@
             <span class="title">{{ pet['pet_name'] }} - </span>
             <span class="state">{{ pet['pst_detail'] }}</span>
             <p>{{ pet['pty_detail'] }} - Raza {{ pet['pet_race'] }}<br>
-                {{ pet['pet_details'] }}
+                {{ pet['pet_description'] }}
             </p>
             <div class="secondary-content">
                 <a href="{{ url_for('pets.edit_pet', pet_id=pet['pet_id']) }}"><i class="material-icons">edit</i></a>
