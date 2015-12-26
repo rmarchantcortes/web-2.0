@@ -13,7 +13,7 @@
     </head>
     <body class="valign-wrapper">
         <div class="row valign">
-            <div class="card-panel hoverable col s8 offset-s1">
+            <div class="card-panel hoverable col s8 offset-s2 center">
                 <form>
                     <div class="input-field col s12">
                         <input name="email" type="text" class="validate">
@@ -23,10 +23,14 @@
                         <input name="password" type="password" class="validate">
                         <label for="password">Contraseña</label>
                     </div>  
-                    <button class="btn waves-effect waves-light green darken-2 center-align" type="submit" id="login">Ingresar
+                    <button class="btn waves-effect waves-light green darken-2 center" type="submit" id="login">Ingresar
                         <i class="material-icons right">send</i>
                     </button>
                 </form>
+                ¿No posees tu cuenta?
+                Crea una <a href="{{ url_for('users.create_user')}}">aquí</a>
+                <br>
+                <br>
             </div>
         </div>
         

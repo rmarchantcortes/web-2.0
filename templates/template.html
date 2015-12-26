@@ -16,25 +16,25 @@
                 <ul class="right hide-on-med-and-down">
                     {% if user %}
                     <li>
-                        <a class='dropdown-button' data-beloworigin="true" data-activates='messages'><i class="material-icons">email</i></a>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='notifications'><i class="material-icons">notifications</i></a>
                         <li>
-                            <ul id='messages' class='dropdown-content'>
+                            <ul id='notifications' class='dropdown-content'>
                                 <li>Hola</li>
                             </ul>
                         </li>
                     </li>
                     <li class="bar"></li>
                     <li>
-                        <a class='dropdown-button' data-beloworigin="true" data-activates='comments'><i class="material-icons">forum</i></a>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='messages'><i class="material-icons">forum</i></a>
                         <li>
-                            <ul id='comments' class='dropdown-content'>
+                            <ul id='messages' class='dropdown-content'>
                                 <li><a href="">Hola</a></li>
                             </ul>
                         </li>
                     </li>
                     <li class="bar"></li>
                     <li>
-                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown1'><i class="material-icons left">perm_identity</i> {{ user[0]['use_name'] }}</a>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown1'><i class="material-icons left">account_circle</i> {{ user[0]['use_name'] }}</a>
                         <li>
                             <ul id='dropdown1' class='dropdown-content'>
                                 <li><a href="{{ url_for('users.user_profile') }}">Mi perfil</a></li>
@@ -46,8 +46,8 @@
                     </li>
                     <li class="bar"></li>
                     {% if user[0]['use_user_type'] < 3 %}
-                                                      <li>
-                    <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown2'>Administración</a>
+                    <li>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown2'><i class="material-icons left">settings</i> Administración</a>
                     <li>
                         <ul id='dropdown2' class='dropdown-content'>
                             <li><a href="{{ url_for('users.user_profile') }}">Usuarios</a></li>
@@ -57,7 +57,7 @@
                     </li>
                 {% endif %}
                 {% else %}
-                <li><a href="{{ url_for('users.user_login') }}">Ingresar</a></li>
+                    <li><a href="{{ url_for('users.user_login') }}"><i class="material-icons left">input</i> Ingresar</a></li>
                 {% endif %}
                 </ul>
             <ul id="nav-mobile" class="side-nav">

@@ -5,6 +5,7 @@
         <h5 class="left">Mis mascotas en adopción</h5>
         <a class="waves-effect waves-light btn right" href="{{ url_for('pets.new_pet') }}"><i class="material-icons left">pets</i> Agregar mascota</a>
     </div>
+    {% if pets %}
     <ul class="collection">
         {% for pet in pets %}
         
@@ -24,6 +25,9 @@
         
         {% endfor %}
     </ul>
+    {% else %}
+    <h6>Aun no ofreces mascotas para que sean adoptadas.</h6>
+    {% endif %}
 </div>
 
 {% endblock %}

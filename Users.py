@@ -94,12 +94,12 @@ def user_profile():
 @users.route('/users/me/adoptions')
 def user_adoptions():
     if validate(get_token()):
-        adoptions = select("SELECT use_name, pet_name, ast_detail FROM pet, user, adoption, adoption_state WHERE use_id = ado_user_request and pet_id = ado_pet_id and ast_id = ado_state ORDER BY ado_updated DESC")
+        adoptions = select("SELECT use_name, pet_name, ast_detail, ado_pet_id, (SELECT pim_url FROM pet_image WHERE ado_pet_id = pim_pet_id) as pet_image FROM pet, user, adoption, adoption_state WHERE use_id = ado_user_request and pet_id = ado_pet_id and ast_id = ado_state ORDER BY ado_updated DESC")
         if request_wants_json():
             return format_json(adoptions)
         else:
             user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
-            return render_template('private/myadoptions.html', user = user, adoptions = adoptions)
+            return render_template('private/myadoptions.html', user = user, pets = adoptions)
     else:
         return render_template('errors/403.html')
 
