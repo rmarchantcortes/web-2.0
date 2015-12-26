@@ -62,3 +62,16 @@
     font-size: 18px;
     font-weight: bold;
 }
+.card-subtitle {
+	font-size: 13px;
+}
+.details{
+    font-size: 17px;
+    font-weight: bold;
+}
+.bar{
+    width: 1px;
+    background-color: #1100F3;
+    height: 35px;
+    margin-top: 13px;
+}

@@ -2,29 +2,35 @@
 {% block wrapper %}
 <div class="container">
 	<form name="search" class="row">
-		<div id="selects" class="col s4">
+		<div class="col s4">
             <div class="input-field col s12">
-                <select class="" name="country">
+                <select name="country">
                     <option value="" disabled>Pais</option>
                     <option value="1" selected>Chile</option>
                 </select> 
                 <label>Pais</label>
             </div>
             <div class="input-field col s12">
-                <select class="" name="state">
-                    <option value="" disabled selected>Ciudad</option>
+                <select name="state">
+                    <option value="" selected>Todas</option>
                 </select>
                 <label>Región</label>
             </div>
-		</div >
-		<div id="checkboxes" class="col s4">
-			as
-        </div>
-		<div id="breeds" class="col s4">
+		</div>
+		<div class="col s4">
+            <div class="input-field col s12">
+                <select name="kind">
+                    <option value="" selected>Todas</option>
+                </select>
+                <label>Especie</label>
+            </div>
             <div class="input-field col s12">
                 <label for="breed">Palabra clave</label>
                 <input type="text" name="breed"/>
             </div>
+        </div>
+		<div class="col s4">
+            
             <div class="input-field col s12">
                 <button class="btn waves-effect waves-light" type="submit" name="search">Buscar
                     <i class="material-icons right">send</i>
@@ -42,10 +48,10 @@
         <div class="row" class="col s12">
         {% for pet in pets %}        
             <div class="col s12 m4">
-                <div class="card">
+                <div class="card medium">
                     <div class="card-image">
                         <img src="{% if pet['pet_image'] %} {{ url_for('static', filename='images/'+pet['pet_image']) }} {% endif %}">
-                        <span class="card-title">{{ pet['pet_name'] }}</span>
+                        <span class="card-title">{{ pet['pet_name'] }}<div class="card-subtitle">{{ pet['pty_detail'] }}</div></span>
                     </div>
                     <div class="card-content">
                         <p>{{ pet['pet_description'] }}</p>

@@ -1,0 +1,61 @@
+{% extends "template.html" %}
+{% block wrapper %}
+<div class="container">
+    <h4>{{ pet['pet_name'] }}</h4>
+    <div class="row">
+        <div class="col s12 m7">
+            <div class="slider">
+                <ul class="slides">
+                    {% for image in images %}
+                    <li>
+                        <img src="{{ url_for('static', filename='images/'+image['pim_url']) }}">
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col s12 m5 center">
+            <div><h5>{{ pet['use_name'] }}</h5></div>
+            <div>Dueño</div>
+            <div><a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Contactar</a></div>
+            <div><a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Adoptar</a></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m7">
+            <span class="details">Detalles</span>
+            <ul class="collection">
+                <li class="collection-item">
+                    <div class="col s5">Nombre</div>
+                    <div class="col s7">{{ pet['pet_name'] }}</div>
+                    <div class="clear"></div>
+                </li>
+                <li class="collection-item">
+                    <div class="col s5">Edad</div>
+                    <div class="col s7">{{ pet['pet_age'] }}</div>
+                    <div class="clear"></div>
+                </li>
+                <li class="collection-item">
+                    <div class="col s5">Especie</div>
+                    <div class="col s7">{{ pet['pty_detail'] }}</div>
+                    <div class="clear"></div>
+                </li>
+                <li class="collection-item">
+                    <div class="col s5">Raza</div>
+                    <div class="col s7">{{ pet['pet_race'] }}</div>
+                    <div class="clear"></div>
+                </li>
+                <li class="collection-item">
+                    <div class="col s5">Fecha</div>
+                    <div class="col s7">{{ pet['pet_created'] }}</div>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m5">
+            <span class="details">Detalles</span>
+            <div>{{ pet['pet_description'] }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

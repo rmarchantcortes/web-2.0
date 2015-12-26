@@ -8,5 +8,14 @@ $(document).ready(function(){
             });
             $('select').material_select();
         }
-    })
+    });
+    $.get(BASE_URL+'/pets/types/', function(data, textStatus, jqXHR){
+        if(jqXHR.status == 200){
+            $.each(data.data, function(key, value){
+                var option = "<option value='"+value.pty_id+"'>"+value.pty_detail+"</option>";
+                $('select[name=kind]').append(option);
+            });
+            $('select').material_select();
+        }
+    });
 });

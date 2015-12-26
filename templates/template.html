@@ -12,11 +12,29 @@
     </head>
     <body>
         <nav class="blue" role="navigation">
-            <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Adopta.lo</a>
+            <div class="nav-wrapper container"><a id="logo-container" href="{{ url_for('pets.get_pets') }}" class="brand-logo">Adopta.lo</a>
                 <ul class="right hide-on-med-and-down">
                     {% if user %}
                     <li>
-                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown1'> {{ user[0]['use_name'] }}</a>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='messages'><i class="material-icons">email</i></a>
+                        <li>
+                            <ul id='messages' class='dropdown-content'>
+                                <li>Hola</li>
+                            </ul>
+                        </li>
+                    </li>
+                    <li class="bar"></li>
+                    <li>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='comments'><i class="material-icons">forum</i></a>
+                        <li>
+                            <ul id='comments' class='dropdown-content'>
+                                <li><a href="">Hola</a></li>
+                            </ul>
+                        </li>
+                    </li>
+                    <li class="bar"></li>
+                    <li>
+                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown1'><i class="material-icons left">perm_identity</i> {{ user[0]['use_name'] }}</a>
                         <li>
                             <ul id='dropdown1' class='dropdown-content'>
                                 <li><a href="{{ url_for('users.user_profile') }}">Mi perfil</a></li>
@@ -26,25 +44,26 @@
                             </ul>
                         </li>
                     </li>
+                    <li class="bar"></li>
                     {% if user[0]['use_user_type'] < 3 %}
+                                                      <li>
+                    <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown2'>Administración</a>
                     <li>
-                        <a class='dropdown-button' data-beloworigin="true" data-activates='dropdown2'>Administración</a>
-                        <li>
-                            <ul id='dropdown2' class='dropdown-content'>
-                                <li><a href="{{ url_for('users.user_profile') }}">Usuarios</a></li>
-                                <li><a href="{{ url_for('users.user_pets') }}">Otro</a></li>
-                            </ul>
-                        </li>
+                        <ul id='dropdown2' class='dropdown-content'>
+                            <li><a href="{{ url_for('users.user_profile') }}">Usuarios</a></li>
+                            <li><a href="{{ url_for('users.user_pets') }}">Otro</a></li>
+                        </ul>
                     </li>
-                    {% endif %}
-                    {% else %}
-                    <li><a href="{{ url_for('users.user_login') }}">Ingresar</a></li>
-                    {% endif %}
+                    </li>
+                {% endif %}
+                {% else %}
+                <li><a href="{{ url_for('users.user_login') }}">Ingresar</a></li>
+                {% endif %}
                 </ul>
-                <ul id="nav-mobile" class="side-nav">
-                    <li><a href="#">Navbar Link</a></li>
-                </ul>
-                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="side-nav">
+                <li><a href="#">Navbar Link</a></li>
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
             </div>
         </nav>
 
@@ -96,9 +115,9 @@
         <script src="{{ url_for('static', filename='js/init.js') }}"></script>
         <script src="{{ url_for('static', filename='js/url.js') }}"></script>
         {% if script %}
-            {% for item in script %}
-            <script src="{{ url_for('static', filename=item) }}"></script>
-            {% endfor %}
+        {% for item in script %}
+        <script src="{{ url_for('static', filename=item) }}"></script>
+        {% endfor %}
         {% endif %}
 
     </body>
