@@ -16,7 +16,16 @@
 				    <li class="collection-item"><label for="phone" class="col s3">Teléfono: </label><span id="phone" class="s9">{{ user[0]['use_phone_number'] }}</span></li>
                     <li class="collection-item"><label for="right" class="col s3">Privilegios: </label><span id="right" class="s9">{{ user[0]['uty_detail'] }}</span></li>
 			    </ul>
-	    	</div>   	
+	    	</div>
+			    <ul >
+			    	<li><a class="waves-effect waves-light btn right" href="{{ url_for('users.edit_user') }}"><i class="material-icons left">edit</i>Editar</a></li>
+			    </ul>
+	    	</div>
+	    	{% endfor %}
+
+	    	<div class="col s4 pull-s8" >
+	    		 <img src="·" alt="" class="circle">
+	    	</div>
     	</div>
     </div>             
 {% endblock %}
