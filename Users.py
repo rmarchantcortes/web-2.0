@@ -124,8 +124,8 @@ def edit_user():
         elif method.request == 'PUT':
             #aqui tienes que recibir los parametros del formulario con request.form
             #tienen que ser enviados con un ajax definiendo el metodo como PUT, no se puede desde el formulario
-            #el pais y regiones colocalos con un get en los formularios como está en el index
-            # con el método get_user_id(get_token()) obtienes el id del usuario logeado
+            #el pais y regiones colocalos con un get en los formularios como esta en el index
+            # con el metodo get_user_id(get_token()) obtienes el id del usuario logeado
             return "edicion"
     else:
         return render_template('errors/403.html')

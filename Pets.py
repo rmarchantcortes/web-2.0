@@ -34,7 +34,7 @@ ITEMS_PER_PAGE = 20
 @pets.route('/pets/page/<int:page>/', methods = ['GET'])
 def get_pets(page = 0):
     if request.method == 'GET':
-        data = select("SELECT pet_id, pet_name, pet_age, pty_detail, use_name, pet_description, (SELECT pim_url FROM pet_image WHERE pim_pet_id = pet_id LIMIT 1) as pet_image FROM user, pet, pet_type WHERE pty_id = pet_type AND pet_state = 2 AND pet_user_id = use_id ORDER BY pet_id DESC LIMIT %i,%i" % (page*ITEMS_PER_PAGE, ITEMS_PER_PAGE))
+        data = select("SELECT pet_id, pet_name, pet_age, pty_detail, pet_user_id, use_name, pet_description, (SELECT pim_url FROM pet_image WHERE pim_pet_id = pet_id LIMIT 1) as pet_image FROM user, pet, pet_type WHERE pty_id = pet_type AND pet_state = 2 AND pet_user_id = use_id ORDER BY pet_id DESC LIMIT %i,%i" % (page*ITEMS_PER_PAGE, ITEMS_PER_PAGE))
         total = int(ceil(select("SELECT count(pet_id) as total FROM pet")[0]['total']/ITEMS_PER_PAGE))
         if page > total:
             return redirect(url_for('pets.get_pets'))
@@ -42,7 +42,7 @@ def get_pets(page = 0):
             return format_json(data)
         else:
             if validate(get_token()):
-                user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+                user = select("SELECT use_name, use_user_type, use_id FROM user WHERE use_id = %s" % (get_user_id(get_token())))
                 return render_template('index.html', user = user, script = ['js/public/index.js'], pets = data, total = total, page = page)
             else:
                 return render_template('index.html', script = ['js/public/index.js'], pets = data, total = total, page = page)
@@ -61,16 +61,17 @@ def get_pets(page = 0):
 @pets.route('/pets/<int:pet_id>/', methods = ['GET', 'PUT', 'DELETE'])
 def get_pet(pet_id):
     if request.method == 'GET':
-        data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name, pet_race, pty_detail, pet_created, pet_description FROM user, pet, pet_type WHERE pty_id = pet_type AND pet_state = 2 AND pet_user_id = use_id AND pet_id = %s" % (pet_id))
+        data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name, pet_user_id, pet_race, pty_detail, pet_created, pet_description FROM user, pet, pet_type WHERE pty_id = pet_type AND pet_state = 2 AND pet_user_id = use_id AND pet_id = %s" % (pet_id))
         images = select("SELECT pim_id, pim_url FROM pet_image WHERE pim_pet_id = %s" % (pet_id))
+        comments = select('SELECT que_id, use_name, que_question, que_answer FROM question, user WHERE que_pet = %i AND que_user = use_id' % (int(pet_id)))
         if request_wants_json():
             return format_json(data)
         else:
             if validate(get_token()):
-                user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
-                return render_template('public/pet.html', user = user, pet = data[0], images = images, script = ['js/public/pet.js'])
+                user = select("SELECT use_id, use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+                return render_template('public/pet.html', user = user, pet = data[0], images = images, comments = comments, script = ['js/public/pet.js'])
             else:
-                return render_template('public/pet.html', pet = data[0], images = images, script = ['js/public/pet.js'])
+                return render_template('public/pet.html', pet = data[0], images = images, comments = comments, script = ['js/public/pet.js'])
     elif request.method == 'PUT' and validate(get_token()):
         name = request.form['name']
         age = request.form['age']
@@ -85,6 +86,42 @@ def get_pet(pet_id):
         return 'PET DELETED'
     return render_template('errors/403.html')
 
+@pets.route('/pets/<int:pet_id>/questions/', methods = ['GET', 'POST'])
+def get_pets_questions(pet_id):
+    if request.method == 'GET':
+        data = select('SELECT que_id, use_name, que_question FROM question, user WHERE que_pet = %i AND que_user = use_id' % (int(pet_id)))
+        return format_json(data);
+    else:
+        if(validate(get_token())):
+            question = request.form['question']
+            if question:
+                question_id = insert("INSERT INTO question(que_user, que_pet, que_question) VALUES(%i,%i,'%s')" % (get_user_id(get_token()), int(pet_id), question))
+                if question_id > 0:
+                    return format_json(select('SELECT que_id, use_name, que_question FROM question, user WHERE que_pet = %i AND que_user = use_id AND que_id = %i' % (int(pet_id), question_id)), 201)
+        return format_json("", 400)
+    return format_json("No has iniciado sesion", 403)
+
+@pets.route('/pets/<int:pet_id>/questions/<int:question_id>/', methods = ['GET', 'PUT'])
+def get_pets_question(pet_id, question_id):
+    if request.method == 'GET':
+        data = select('SELECT que_id, use_name, que_question, que_answer FROM question, user WHERE que_pet = %i AND que_user = use_id AND que_id = %i' % (int(pet_id), int(question_id)))
+        return format_json(data);
+    else:
+        answer = request.form['answer']
+        if validate(get_token()):
+            if answer:
+                pet = select("SELECT pet_id FROM pet WHERE pet_id = %i AND pet_user_id = %i" % (int(pet_id), get_user_id(get_token())))
+                if len(pet) > 0:
+                    result = update("UPDATE question SET que_answer = '%s' WHERE que_id = %i " % (answer, question_id))
+                    if result > 0:
+                        data = select('SELECT que_id, use_name, que_question, que_answer FROM question, user WHERE que_pet = %i AND que_user = use_id AND que_id = %i' % (int(pet_id), int(question_id)))
+                        return format_json(data,200)
+                    return format_json("",400)
+                return format_joson("",403)
+            return format_json("",400)
+        return format_json("",403)
+
+    
 @pets.route('/pets/<int:pet_id>/images/', methods = ['GET', 'POST'])
 def get_pet_images(pet_id):
     if request.method == 'GET':

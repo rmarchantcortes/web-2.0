@@ -75,3 +75,20 @@
     height: 35px;
     margin-top: 13px;
 }
+.user-image{
+    margin-top: 7.500px;
+    border: 1px solid #e0e0e0;
+}
+.link{
+    color: black;
+}
+.btn{
+    margin-top: 7px;
+}
+#questions, #form-question{
+    display: none;
+}
+.collapsible-body button{
+	margin-bottom: 10px;
+    margin-right: 10px;
+}

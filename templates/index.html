@@ -48,16 +48,15 @@
         <div class="row" class="col s12">
         {% for pet in pets %}        
             <div class="col s12 m4">
-                <div class="card medium">
-                    <div class="card-image">
-                        <img src="{% if pet['pet_image'] %} {{ url_for('static', filename='images/'+pet['pet_image']) }} {% endif %}">
-                        <span class="card-title">{{ pet['pet_name'] }}<div class="card-subtitle">{{ pet['pty_detail'] }}</div></span>
-                    </div>
+                <div class="card small">
+                    <a href="{{url_for('pets.get_pet', pet_id=pet['pet_id'])}}">
+                        <div class="card-image">
+                            <img src="{% if pet['pet_image'] %} {{ url_for('static', filename='images/'+pet['pet_image']) }} {% endif %}">
+                            <span class="card-title">{{ pet['pet_name'] }}<div class="card-subtitle">{{ pet['pty_detail'] }}</div></span>
+                        </div>
+                    </a>
                     <div class="card-content">
                         <p>{{ pet['pet_description'] }}</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="{{url_for('pets.get_pet', pet_id=pet['pet_id'])}}">Ver más</a>
                     </div>
                 </div>
             </div>

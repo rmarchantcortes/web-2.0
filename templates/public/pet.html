@@ -15,10 +15,19 @@
             </div>
         </div>
         <div class="col s12 m5 center">
-            <div><h5>{{ pet['use_name'] }}</h5></div>
-            <div>Dueño</div>
-            <div><a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Contactar</a></div>
-            <div><a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Adoptar</a></div>
+            <div class="row">
+                <div class="col s12">
+                    <img class="circle image-responsive user-image" src="{{ url_for('static', filename='images/unknown-profile.png') }}">
+                </div>
+                <div class="col s12"><h5>{{ pet['use_name'] }}</h5></div>
+                <div class="col s12">Dueño</div>
+                {% if not user or user['use_id'] != pet['pet_user_id'] %}
+                <a class="waves-effect waves-light btn"><i class="material-icons left">email</i>Contactar dueño</a>
+                <a class="waves-effect waves-light btn"><i class="material-icons left">pets</i>Adoptar mascota</a>            
+                {% else %}
+                <a class="waves-effect waves-light btn" href="{{ url_for('pets.edit_pet', pet_id = pet['pet_id'])}}"><i class="material-icons left">edit</i>Editar mascota</a>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="row">
@@ -26,7 +35,7 @@
             <span class="details">Detalles</span>
             <ul class="collection">
                 <li class="collection-item">
-                    <div class="col s5">Nombre</div>
+                    <div class="col s5" id="name" pet_id="{{ pet['pet_id'] }}">Nombre</div>
                     <div class="col s7">{{ pet['pet_name'] }}</div>
                     <div class="clear"></div>
                 </li>
@@ -55,6 +64,70 @@
         <div class="col s12 m5">
             <span class="details">Detalles</span>
             <div>{{ pet['pet_description'] }}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col s12 center">
+                <a class="waves-effect waves-light btn" id="see-questions"><i class="material-icons left">comments</i>Ver Consultas</a>
+                <a class="waves-effect waves-light btn" id="make-question"><i class="material-icons left">add</i>Realizar consulta</a>
+            </div>
+        </div>
+        <div class="col s12">
+            <div class="row" id="form-question">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Consultar sobre {{ pet['pet_name'] }}</span>
+                        <form name="question">
+                            <div class="input-field col s12">
+                                <textarea name="question" class="materialize-textarea"></textarea>
+                            </div>
+                            <a class="waves-effect waves-light btn left"><i class="material-icons left">clear</i>Cancelar</a>
+                            <button class="btn waves-effect waves-light right" type="submit" name="question">Enviar consulta
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </form>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <ul class="collapsible popout" id="questions" data-collapsible="accordion"> 
+                {% if comments %}
+                {% for question in comments %}
+                <li id="{{ question['que_id'] }}">
+                    <div class="collapsible-header">
+                        {{ question['que_question'] }} - {{ question['use_name'] }}
+                        {% if (pet['pet_user_id'] == user[0]['use_id']) %}
+                        <a><i class="material-icons right reply">reply</i></a>
+                        {% else %}
+                        <a><i class="material-icons right reply">expand_more</i></a>
+                        {% endif %}
+                    </div>
+                    <div class="collapsible-body">
+                        {% if (pet['pet_user_id'] == user[0]['use_id']) %}
+                        <form name="question">
+                            <div class="input-field col s12">
+                                <textarea name="answer" class="materialize-textarea">{% if question['que_answer'] %}{{ question['que_answer'] }}{% endif %}</textarea>
+                            </div>
+                            <button class="btn waves-effect waves-light right" type="submit" name="respond">Responder
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </form>
+                        <div class="clear"></div>
+                        {% else %}
+                        {% if question['que_answer'] %}
+                        {{ question['que_answer'] }}
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li>
+                    <div class="collapsible-header">No existen consultas sobre la mascota</div>
+                </li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </div>
