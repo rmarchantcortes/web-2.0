@@ -13,6 +13,9 @@
 				    <li class="collection-item"><label for="phone">Teléfono: </label><span id="phone">{{ user['use_phone_number'] }}</span></li>
 			    	<li class="collection-item"><label for="right">Privilegios: </label><span id="right">{{ user['uty_detail'] }}</span></li>
 			    </ul>
+			    <ul >
+			    	<li><a class="waves-effect waves-light btn right" href="{{ url_for('users.edit_user') }}"><i class="material-icons left">edit</i>Editar</a></li>
+			    </ul>
 	    	</div>
 	    	{% endfor %}
 
