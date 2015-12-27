@@ -115,3 +115,17 @@ def user_pets():
     else:
         return render_template('errors/403.html')
 
+@users.route('/users/me/edit', methods = ['GET', 'PUT'])
+def edit_user():
+    if validate(get_token()):
+        if method.request == 'GET':
+            user = select("SELECT u.use_name, u.use_user_type, u.use_email, u.use_phone_number, s.sta_name, t.uty_detail, c.cou_name FROM user u, state s, user_type t, country c WHERE c.cou_id=s.sta_country_id AND t.uty_id=u.use_user_type AND u.use_state_id=s.sta_id AND u.use_id = %s" % (get_user_id(get_token())))
+            return render_template('private/edit_user.html', user = user)
+        elif method.request == 'PUT':
+            #aqui tienes que recibir los parametros del formulario con request.form
+            #tienen que ser enviados con un ajax definiendo el metodo como PUT, no se puede desde el formulario
+            #el pais y regiones colocalos con un get en los formularios como está en el index
+            # con el método get_user_id(get_token()) obtienes el id del usuario logeado
+            return "edicion"
+    else:
+        return render_template('errors/403.html')
