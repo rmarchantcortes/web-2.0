@@ -1,5 +1,6 @@
 {% extends "template.html" %}
 {% block wrapper %}
+<script src="/static/js/private/edit_user.js"></script>
 <div class="container">
     <form method="PUT" >
     	<div>
@@ -20,23 +21,28 @@
 	    	</div>
 	    	<div class="row">
 		        <div class="input-field col s6">
-		          <input id="email" type="text" class="validate">
+		          <input id="email" type="text" class="validate" value="{{ user[0]['use_email']}}">
 		          <label for="email">Correo</label>
 		        </div>
 		        <div class="input-field col s6">
-		          <input id="phone" type="text" class="validate">
+		          <input id="phone" type="text" class="validate" value="{{ user[0]['use_phone_number']}}">
 		          <label for="phone">Teléfono</label>
 		        </div>
 	    	</div>
 	    	<div class="row">
 		        <div class="input-field col s6">
-		          <input id="passwd" type="text" class="validate">
+		          <input id="passwd" type="text" class="validate" >
 		          <label for="passwd">Contraseña</label>
 		        </div>
 		        <div class="input-field col s6">
-		          <input id="re-passwd" type="text" class="validate">
+		          <input id="re-passwd" type="text" class="validate" >
 		          <label for="re-passwd">Comprobar contraseña</label>
 		        </div>
+	    	</div>
+	    	<div class="row">
+			 	<button class="btn waves-effect waves-light green darken-2 right" type="submit" id="publish-pet">Aceptar
+			        <i class="material-icons right">send</i>
+			    </button>
 	    	</div>
     	</div>
     </form>

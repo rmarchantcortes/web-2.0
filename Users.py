@@ -119,8 +119,8 @@ def user_pets():
 def edit_user():
     if validate(get_token()):
         if request.method == 'GET':
-            user = select("SELECT u.use_name, u.use_user_type, u.use_email, u.use_phone_number, s.sta_name, t.uty_detail, c.cou_name FROM user u, state s, user_type t, country c WHERE c.cou_id=s.sta_country_id AND t.uty_id=u.use_user_type AND u.use_state_id=s.sta_id AND u.use_id = %s" % (get_user_id(get_token())))
-            return render_template('private/edit_user.html', user = user)
+            user = select("SELECT u.use_name, u.use_user_type, u.use_email, u.use_phone_number, s.sta_id, s.sta_name, t.uty_detail, c.cou_name FROM user u, state s, user_type t, country c WHERE c.cou_id=s.sta_country_id AND t.uty_id=u.use_user_type AND u.use_state_id=s.sta_id AND u.use_id = %s" % (get_user_id(get_token())))
+            return render_template('private/edit_user.html', user = user, script = ['js/private/edit_user.js'])
         elif request.method == 'PUT':
             asa="asa"
             return asa
