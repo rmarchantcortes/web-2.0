@@ -1,46 +1,54 @@
 {% extends "template.html" %}
 {% block wrapper %}
-<script src="/static/js/private/edit_user.js"></script>
 <div class="container">
-    <form method="PUT" >
+    <form >
     	<div>
+    		<div class="row">
+    			<div class="input-field col s6">
+		          <input name="name" type="text" class="validate" value="{{ user[0]['use_name']}}">
+		          <label for="name"><span class="red-text lg">* </span>Nombre</label>
+		        </div>
+		        <div class="input-field col s6">
+		          <input name="email" type="text" class="validate" value="{{ user[0]['use_email']}}">
+		          <label for="email"><span class="red-text lg">* </span>Correo</label>
+		        </div>
+    		</div>
 	    	<div class="row">
 			    <div class="input-field col s6">
 	                <select name="u_country">
 	                    <option value="" disabled>Pais</option>
 	                    <option value="1" selected>Chile</option>
 	                </select> 
-	                <label>Pais</label>
+	                <label><span class="red-text lg">* </span>País</label>
 	            </div>
 	            <div class="input-field col s6">
 	                <select name="u_state">
-	                    <option value="" selected>Todas</option>
 	                </select>
-	                <label>Región</label>
+	                <label><span class="red-text lg">* </span>Región</label>
 	            </div>
 	    	</div>
 	    	<div class="row">
 		        <div class="input-field col s6">
-		          <input id="email" type="text" class="validate" value="{{ user[0]['use_email']}}">
-		          <label for="email">Correo</label>
+		          <input name="phone" type="text" class="validate" value="{{ user[0]['use_phone_number']}}">
+		          <label for="phone"><span class="red-text lg">* </span>Teléfono</label>
 		        </div>
 		        <div class="input-field col s6">
-		          <input id="phone" type="text" class="validate" value="{{ user[0]['use_phone_number']}}">
-		          <label for="phone">Teléfono</label>
+		          <input name="last_passwd" type="text" class="validate" >
+		          <label for="last-passwd">Contraseña actual</label>
 		        </div>
 	    	</div>
 	    	<div class="row">
-		        <div class="input-field col s6">
-		          <input id="passwd" type="text" class="validate" >
-		          <label for="passwd">Contraseña</label>
+				<div class="input-field col s6">
+		          <input name="new_passwd" type="text" class="validate" >
+		          <label for="new-passwd">Nueva contraseña</label>
 		        </div>
 		        <div class="input-field col s6">
-		          <input id="re-passwd" type="text" class="validate" >
-		          <label for="re-passwd">Comprobar contraseña</label>
+		          <input name="re_new_passwd" type="text" class="validate" >
+		          <label for="re-new-passwd">Reingrese contraseña</label>
 		        </div>
 	    	</div>
 	    	<div class="row">
-			 	<button class="btn waves-effect waves-light green darken-2 right" type="submit" id="publish-pet">Aceptar
+			 	<button class="btn waves-effect waves-light green darken-2 right" type="submit" id="btn_edit_user">Aceptar
 			        <i class="material-icons right">send</i>
 			    </button>
 	    	</div>
