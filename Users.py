@@ -5,7 +5,8 @@ from Model import(
 )
 from Response import (
     format_json,
-    request_wants_json
+    request_wants_json,
+    return_forbidden
 )
 from flask import(
     request,
@@ -37,7 +38,7 @@ def get_users():
                 data = select('SELECT use_id, use_name, use_email FROM user WHERE use_id = %i' % (user_id))
                 return format_json(data, 201)
             else:
-                return "error"
+                return format_json(data, 400)
 
 @users.route('/users/new/', methods = ['GET'])
 def create_user():
@@ -113,7 +114,7 @@ def user_pets():
             user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
             return render_template('private/mypets.html', user = user, pets = pets)
     else:
-        return render_template('errors/403.html')
+        return return_forbidden()
 
 @users.route('/users/me/edit', methods = ['GET', 'PUT'])
 def edit_user():
@@ -131,3 +132,29 @@ def edit_user():
     else:
         return render_template('errors/403.html')
 
+@users.route('/users/me/messages/', methods=['GET', 'POST'])
+def get_destinations():
+    if validate(get_token()):
+        if request.method == 'GET':
+            if request_wants_json():
+                data = select("SELECT mes_id, mes_user_to, mes_user_from, mes_message, mes_status FROM message, user WHERE mes_user_from = %i OR mes_user_to = %i GROUP BY mes_id" % (get_user_id(get_token()), get_user_id(get_token())))
+                return format_json(data)
+            else:
+                user = select("SELECT use_name, use_user_type, use_id FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+                data = select("SELECT use_name, use_id, max(mes_date) as mes_date FROM message, (SELECT use_name, use_id FROM message, user WHERE (mes_user_to = %i OR mes_user_from = %i) AND (mes_user_to = use_id OR mes_user_from = use_id) GROUP BY use_id ORDER BY mes_date DESC) as tb WHERE (mes_user_from = use_id OR mes_user_to = use_id) AND use_id <> %i GROUP BY use_id ORDER BY mes_date DESC" % (get_user_id(get_token()), get_user_id(get_token()), get_user_id(get_token())))
+                return render_template('private/messages.html', user = user, messages = data, script = ['js/private/messages.js'])
+        elif request.method == 'POST':
+            to = request.form['to']
+            message = request.form['message']
+            message_id = insert("INSERT INTO message(mes_user_from, mes_user_to, mes_message, mes_status, mes_date) VALUES(%i, %i, '%s', 'No leido', now())" % (get_user_id(get_token()), int(to), message))
+            if message_id > 0:
+                return format_json(select("SELECT * FROM message WHERE mes_id = %i" % (message_id)),201)
+            return forma_json("",400)
+    return return_forbidden()
+
+@users.route('/users/me/messages/user/<int:user_id>/', methods=['GET'])
+def get_messages(user_id):
+    if validate(get_token()):
+        data = select("SELECT mes_id, mes_message, mes_user_from, us2.use_name as user2, mes_user_to, us1.use_name as user1, mes_status, mes_date FROM message, user us1, user us2 WHERE ((mes_user_from = %i AND mes_user_to = %i) OR  (mes_user_from = %i AND mes_user_to = %i)) AND us1.use_id = mes_user_to AND us2.use_id = mes_user_from GROUP BY mes_id ORDER BY mes_id DESC" % (get_user_id(get_token()), int(user_id), int(user_id), get_user_id(get_token())))
+        return format_json(data)
+    return return_forbidden()

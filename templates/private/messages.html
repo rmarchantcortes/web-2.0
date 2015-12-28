@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+{% block wrapper %}
+<div class="container">
+    <div class="row">
+        <h5 class="left">Mensajes</h5>
+    </div>
+    <div class="row">
+        <div class="col s12 m4 box-contact">
+            <ul class="collection">
+                {% for message in messages %}
+                <li class="collection-item avatar" id="{{ message['use_id'] }}">
+                    <img src="{% if message['use_image'] %} {{ url_for('static', filename='images/'+message['use_image']) }} {% else %} {{ url_for('static', filename='images/unknown-profile.png') }} {% endif %}" alt="" class="circle">
+                    <span class="title">{{ message['use_name']}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col s12 m8 box-message" user="{{user[0]['use_id']}}"></div>
+    </div>
+</div>
+{% endblock %}

@@ -63,7 +63,7 @@ def get_pet(pet_id):
     if request.method == 'GET':
         data = select("SELECT pet_id, pet_name, pet_age, pet_type, use_name, pet_user_id, pet_race, pty_detail, pet_created, pet_description FROM user, pet, pet_type WHERE pty_id = pet_type AND pet_state = 2 AND pet_user_id = use_id AND pet_id = %s" % (pet_id))
         images = select("SELECT pim_id, pim_url FROM pet_image WHERE pim_pet_id = %s" % (pet_id))
-        comments = select('SELECT que_id, use_name, que_question, que_answer FROM question, user WHERE que_pet = %i AND que_user = use_id' % (int(pet_id)))
+        comments = select('SELECT que_id, use_name, que_question, que_answer, que_date FROM question, user WHERE que_pet = %i AND que_user = use_id ORDER BY que_date DESC' % (int(pet_id)))
         if request_wants_json():
             return format_json(data)
         else:
@@ -89,13 +89,13 @@ def get_pet(pet_id):
 @pets.route('/pets/<int:pet_id>/questions/', methods = ['GET', 'POST'])
 def get_pets_questions(pet_id):
     if request.method == 'GET':
-        data = select('SELECT que_id, use_name, que_question FROM question, user WHERE que_pet = %i AND que_user = use_id' % (int(pet_id)))
+        data = select('SELECT que_id, use_name, que_question, que_date FROM question, user WHERE que_pet = %i AND que_user = use_id ORDER BY que_date DESC' % (int(pet_id)))
         return format_json(data);
     else:
         if(validate(get_token())):
             question = request.form['question']
             if question:
-                question_id = insert("INSERT INTO question(que_user, que_pet, que_question) VALUES(%i,%i,'%s')" % (get_user_id(get_token()), int(pet_id), question))
+                question_id = insert("INSERT INTO question(que_user, que_pet, que_question, que_date) VALUES(%i,%i,'%s', now())" % (get_user_id(get_token()), int(pet_id), question))
                 if question_id > 0:
                     return format_json(select('SELECT que_id, use_name, que_question FROM question, user WHERE que_pet = %i AND que_user = use_id AND que_id = %i' % (int(pet_id), question_id)), 201)
         return format_json("", 400)
@@ -104,7 +104,7 @@ def get_pets_questions(pet_id):
 @pets.route('/pets/<int:pet_id>/questions/<int:question_id>/', methods = ['GET', 'PUT'])
 def get_pets_question(pet_id, question_id):
     if request.method == 'GET':
-        data = select('SELECT que_id, use_name, que_question, que_answer FROM question, user WHERE que_pet = %i AND que_user = use_id AND que_id = %i' % (int(pet_id), int(question_id)))
+        data = select('SELECT que_id, use_name, que_question, que_answer, que_date FROM question, user WHERE que_pet = %i AND que_user = use_id AND que_id = %i ORDER_BY que_date DESC' % (int(pet_id), int(question_id)))
         return format_json(data);
     else:
         answer = request.form['answer']

@@ -92,3 +92,46 @@
 	margin-bottom: 10px;
     margin-right: 10px;
 }
+.row .col.box-contact {
+	padding: 0px;
+}
+.box-contact{
+    padding: 0px 0px;
+    border-left: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    height: 400px;
+    overflow-y: scroll;
+}
+.box-contact .collection{
+    border-left: 0px;
+    margin: 0px;
+}
+.box-message{
+    border: 1px solid #e0e0e0;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.box-contact .collection .collection-item{
+    border-left: 0px;
+    cursor: pointer;
+    background-color: white;
+}
+.box-contact .collection .collection-item.active{
+    background-color: lightgray;
+    color: black;
+}
+.box-message .name{
+    font-size: 15px;
+    color: black;
+    font-weight: 500;
+}
+.box-message .date{
+    font-size: 9px;
+    color: gray;
+}
+.box-message .message{
+    font-size: 15px;
+    color: black;
+    font-weight: 300
+}

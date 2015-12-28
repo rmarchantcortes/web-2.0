@@ -16,6 +16,10 @@
                 <ul class="right hide-on-med-and-down">
                     {% if user %}
                     <li>
+                        <a href="{{ url_for('pets.get_pets') }}"><i class="material-icons">home</i></a>
+                    </li>
+                    <li class="bar"></li>
+                    <li>
                         <a class='dropdown-button' data-beloworigin="true" data-activates='notifications'><i class="material-icons">notifications</i></a>
                         <li>
                             <ul id='notifications' class='dropdown-content'>
@@ -28,7 +32,7 @@
                         <a class='dropdown-button' data-beloworigin="true" data-activates='messages'><i class="material-icons">forum</i></a>
                         <li>
                             <ul id='messages' class='dropdown-content'>
-                                <li><a href="">Hola</a></li>
+                                <li><a href="{{ url_for('users.get_destinations') }}">Ver todos</a></li>
                             </ul>
                         </li>
                     </li>

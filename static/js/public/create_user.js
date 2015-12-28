@@ -33,8 +33,8 @@ $(document).ready(function() {
                 email: $('input[name=email]').val(),
                 password: hash
             },
-            success: function(data){
-                console.log(data)
+            success: function(data, textStatus, jqXHR){
+                if (jqXHR.status == 201) window.location.href = BASE_URL+'/users/login/';
             }
         });
     });

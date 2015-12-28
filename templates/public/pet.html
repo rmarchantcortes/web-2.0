@@ -21,8 +21,8 @@
                 </div>
                 <div class="col s12"><h5>{{ pet['use_name'] }}</h5></div>
                 <div class="col s12">Dueño</div>
-                {% if not user or user['use_id'] != pet['pet_user_id'] %}
-                <a class="waves-effect waves-light btn"><i class="material-icons left">email</i>Contactar dueño</a>
+                {% if not user or pet['pet_user_id'] != user[0]['use_id'] %}
+                <a class="waves-effect waves-light btn modal-trigger" href="#message-modal"><i class="material-icons left">email</i>Contactar dueño</a>
                 <a class="waves-effect waves-light btn"><i class="material-icons left">pets</i>Adoptar mascota</a>            
                 {% else %}
                 <a class="waves-effect waves-light btn" href="{{ url_for('pets.edit_pet', pet_id = pet['pet_id'])}}"><i class="material-icons left">edit</i>Editar mascota</a>
@@ -116,7 +116,7 @@
                         <div class="clear"></div>
                         {% else %}
                         {% if question['que_answer'] %}
-                        {{ question['que_answer'] }}
+                        <p>{{ question['que_answer'] }}</p>                        
                         {% endif %}
                         {% endif %}
                     </div>
@@ -128,6 +128,23 @@
                 </li>
                 {% endif %}
             </ul>
+        </div>
+    </div>
+    <div id="message-modal" class="modal">
+        <div class="modal-content">
+            <h5>Enviar mensaje a {{ pet['use_name']}}</h5>
+            <p>
+            <form name="message">
+                <div class="input-field col s12">
+                    <textarea name="message" class="materialize-textarea"></textarea>
+                </div>
+                <input type="text" value="{{ pet['pet_user_id'] }}" name="to" hidden="true">
+            </form>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" id="send-message">Enviar</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
         </div>
     </div>
 </div>

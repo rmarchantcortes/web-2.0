@@ -1,6 +1,8 @@
 $(document).ready(function(){
     $('.slider').slider({full_width: true});
     $('.collapsible').collapsible();
+    $('.modal-trigger').leanModal();
+    
     $('#see-questions').click(function(){
         $('#form-question').hide();
         $('#questions').show()
@@ -20,6 +22,7 @@ $(document).ready(function(){
                     if(jqXHR.status == 201){
                         $('#questions').prepend(formatQuestion(data.data[0]));
                         $('#form-question').hide();
+                        Materialize.toast('La consulta ha sido enviada', 4000);
                     }
                 }
             });
@@ -35,13 +38,31 @@ $(document).ready(function(){
                 success: function(data, textStatus, jqXHR){
                     if(jqXHR.status == 200){
                         $('#'+$(this).parent().parent().parent().attr('id')+' textarea').html(data.data[0].que_answer);
+                        Materialize.toast('Respuesta enviada', 4000);
                     }
                 }
             });
         }        
     });
+        
+    $('#send-message').click(function(){
+        if($('textarea[name=message]').val() != ""){
+            $.ajax({
+                url: BASE_URL+'/users/me/messages/',
+                type: 'POST',
+                data: $('form[name=message]').serialize(),
+                success: function(data, textStatus, jqXHR){
+                    if(jqXHR.status == 201){
+                        $('#message-modal').closeModal();
+                        Materialize.toast('Su mensaje ha sido enviado', 4000);
+                    }
+                }
+            })
+        }
+    });
+    
     var formatQuestion = function(value){
-         return "<li id='"+value.que_id+"'><div class='collapsible-header'>"+value.que_question+"<div><div class='collapsible-body'><p></p></div></li>";
+        return "<li id='"+value.que_id+"'><div class='collapsible-header'>"+value.que_question+"<a><i class='material-icons right reply'>expand_more</i></a><div><div class='collapsible-body'><p></p></div></li>";
          
      }
             
