@@ -120,14 +120,30 @@ def edit_user():
     if validate(get_token()):
         if request.method == 'GET':
             user = select("SELECT u.use_name, u.use_user_type, u.use_email, u.use_phone_number, s.sta_id, s.sta_name, t.uty_detail, c.cou_name FROM user u, state s, user_type t, country c WHERE c.cou_id=s.sta_country_id AND t.uty_id=u.use_user_type AND u.use_state_id=s.sta_id AND u.use_id = %s" % (get_user_id(get_token())))
-            return render_template('private/edit_user.html', user = user, script = ['js/private/edit_user.js'])
+            return render_template('private/edit_user.html', user = user, script = ['js/private/edit_user.js','bower_components/jsSHA/src/sha.js'])
         elif request.method == 'PUT':
-            asa="asa"
-            return asa
+            name = request.form['name']
+            email = request.form['email']
+            state = request.form['u_state']
+            phone = request.form['phone']
+            last_passwd = request.form['last_passwd']
+            new_passwd = request.form['new_passwd']
+            new_passwd_second = request.form['re_new_passwd']
 
+            if last_passwd and new_passwd and new_passwd_second:
+                hashed_password = get_hash(last_passwd, select("SELECT use_salt FROM user WHERE use_id=%s" % (get_user_id(get_token()))))
+                if new_passwd == new_passwd_second and hashed_password == select("SELECT use_password FROM user WHERE use_id=%s" % (get_user_id(get_token()))):
+                    salt = get_new_salt();
+                    hashed_new_password = get_hash(new_passwd, salt)
+                    update("UPDATE user SET use_name=%s, use_email=%s, use_state_id=(SELECT sta_id FROM state WHERE sta_name=%s AND use_id=%s), use_phone_number=%s, use_password=%s, use_salt=%s WHERE use_id = %s" % (name, email, state, get_user_id(get_token()), phone, salt, get_user_id(get_token())))
+                    return render_template('private/profile.html')
+                else:
+                    return render_template('errors/403.html')
+            else:
+                update("UPDATE user SET use_name=%s, use_email=%s, use_state_id=(SELECT sta_id FROM state WHERE sta_name=%s AND use_id=%s), use_phone_number=%s WHERE use_id = %s" % (name, email, state, get_user_id(get_token()), phone, get_user_id(get_token())))
+                return render_template('private/profile.html')
         else:
-            aza="asasas"
-            return aza
+            return render_template('errors/403.html')
     else:
         return render_template('errors/403.html')
 
