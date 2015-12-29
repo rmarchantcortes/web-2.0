@@ -23,7 +23,7 @@ $(document).ready(function(){
         var shaObjrenew = new jsSHA("SHA-512", "TEXT");
         shaObjrenew.update($('input[name=re_new_passwd]').val());
         var hashrenew = shaObjrenew.getHash("HEX");
-        console.log("asa");
+        console.log("asi");
         $.ajax({
             url: BASE_URL+'/users/me/profile',
             type: 'PUT',
@@ -38,7 +38,10 @@ $(document).ready(function(){
                 re_new_passwd: hashrenew
             },
             success: function(data){
-                console.log(data);
+                if (jqXHR.status == 200){
+                    //window.location.href = BASE_URL+'/pets/'+data.data.pet_id+'/edit/';
+                    Materialize.toast('El usuario ha sido actualizada', 4000);
+                }
             }
         })
     });
