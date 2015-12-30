@@ -1,0 +1,160 @@
+{% extends "template.html" %}
+{% block wrapper %}
+    <div class="container">
+        
+        {% if user[0]['use_user_type'] == 1 %}
+            <div class="row">
+                <div class="col s12">
+                  <ul class="tabs">
+                    <li class="tab col s4"><a class="active" href="#admins">Administradores</a></li>
+                    <li class="tab col s4"><a href="#moderators">Moderadores</a></li>
+                    <li class="tab col s4"><a href="#users">Usuarios</a></li>
+                  </ul>
+                </div>
+
+                <div id="admins" class="col s12">
+                    <table name="table_admins">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>País</th>
+                                <th>Región</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for admin in admins %} 
+                            <tr>
+                                <td>{{ admin['use_name'] }}</td>
+                                <td>{{ admin['cou_name'] }}</td>
+                                <td>{{ admin['sta_name'] }}</td>
+                                <td>{{ admin['use_email'] }}</td>
+                                <td>{{ admin['use_phone_number'] }}</td>
+                                <td>{{ admin['ust_detail'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="moderators" class="col s12">
+                    <table name="table_moderators">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>País</th>
+                                <th>Región</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for moder in moderators %} 
+                            <tr>
+                                <td>{{ moder['use_name'] }}</td>
+                                <td>{{ moder['use_email'] }}</td>
+                                <td>{{ moder['use_phone_number'] }}</td>
+                                <td>{{ moder['sta_name'] }}</td>
+                                <td>{{ moder['cou_name'] }}</td>
+                                <td>{{ moder['ust_detail'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="users" class="col s12">
+                    <table name="table_admins">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>País</th>
+                                <th>Región</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %} 
+                            <tr>
+                                <td>{{ user['use_name'] }}</td>
+                                <td>{{ user['use_email'] }}</td>
+                                <td>{{ user['use_phone_number'] }}</td>
+                                <td>{{ user['sta_name'] }}</td>
+                                <td>{{ user['cou_name'] }}</td>
+                                <td>{{ user['ust_detail'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+        {% elif user[0]['use_user_type'] == 2 %}
+            <div class="row">
+                <div class="col s12">
+                  <ul class="tabs">
+                    <li class="tab col s4"><a class="active" href="#moderators">Moderadores</a></li>
+                    <li class="tab col s4"><a href="#users">Usuarios</a></li>
+                  </ul>
+                </div>
+                <div id="moderators" class="col s12">
+                    <table name="table_moderators">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>País</th>
+                                <th>Región</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for moder in moderators %} 
+                            <tr>
+                                <td>{{ moder['use_name'] }}</td>
+                                <td>{{ moder['use_email'] }}</td>
+                                <td>{{ moder['use_phone_number'] }}</td>
+                                <td>{{ moder['sta_name'] }}</td>
+                                <td>{{ moder['cou_name'] }}</td>
+                                <td>{{ moder['ust_detail'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="users" class="col s12">
+                    <table name="table_admins">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>País</th>
+                                <th>Región</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %} 
+                            <tr>
+                                <td>{{ user['use_name'] }}</td>
+                                <td>{{ user['use_email'] }}</td>
+                                <td>{{ user['use_phone_number'] }}</td>
+                                <td>{{ user['sta_name'] }}</td>
+                                <td>{{ user['cou_name'] }}</td>
+                                <td>{{ user['ust_detail'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <span>Usuario sin permisos</span>
+        {% endif %}
+    </div>
+{% endblock %}

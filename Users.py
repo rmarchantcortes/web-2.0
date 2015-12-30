@@ -84,6 +84,28 @@ def user_logout():
     unset_session()
     return redirect(url_for('pets.get_pets'))
 
+@users.route('/users/me/administration', methods = ['GET'])
+def user_admin():
+    if request.method == 'GET':
+        if validate(get_token()):
+            user = select("SELECT use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+            if user[0]['use_user_type']== 1:
+                admins = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 1")
+            #select("SELECT u.use_name, u.use_user_type, u.use_email, u.use_phone_number, s.sta_name, t.uty_detail, c.cou_name FROM user u, state s, user_type t, country c WHERE c.cou_id=s.sta_country_id AND t.uty_id=u.use_user_type AND u.use_state_id=s.sta_id AND u.use_id = %s" % (get_user_id(get_token())))
+                moderators = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 2")
+                users = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 3")
+                return render_template('private/administration.html', user = user, admins = admins, moderators = moderators, users = users)
+            elif user[0]['use_user_type']== 2:
+                moderators = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 2")
+                users = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 3")
+                return render_template('private/administration.html', user = user, moderators = moderators, users = users)
+            else:
+                return render_template('errors/403.html')
+        else:
+            return render_template('errors/403.html')
+    else:
+        return render_template('errors/403.html')
+
 @users.route('/users/me/profile', methods = ['GET','PUT'])
 def user_profile():
     if request.method == 'GET':
