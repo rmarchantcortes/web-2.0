@@ -84,20 +84,17 @@ def user_logout():
     unset_session()
     return redirect(url_for('pets.get_pets'))
 
-@users.route('/users/me/administration', methods = ['GET'])
+@users.route('/users/me/administration/', methods = ['GET'])
 def user_admin():
     if request.method == 'GET':
         if validate(get_token()):
-            user = select("SELECT use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
-            if user[0]['use_user_type']== 1:
-                admins = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 1")
-            #select("SELECT u.use_name, u.use_user_type, u.use_email, u.use_phone_number, s.sta_name, t.uty_detail, c.cou_name FROM user u, state s, user_type t, country c WHERE c.cou_id=s.sta_country_id AND t.uty_id=u.use_user_type AND u.use_state_id=s.sta_id AND u.use_id = %s" % (get_user_id(get_token())))
-                moderators = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 2")
-                users = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 3")
+            user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
+            admins = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 1")
+            moderators = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 2")
+            users = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 3")
+            if user[0]['use_user_type'] == 1:                
                 return render_template('private/administration.html', user = user, admins = admins, moderators = moderators, users = users)
-            elif user[0]['use_user_type']== 2:
-                moderators = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 2")
-                users = select("SELECT use_name, use_email, use_phone_number, sta_name, cou_name, ust_detail FROM user_state, state, user, country WHERE ust_id=use_user_state AND cou_id=sta_country_id AND  use_state_id=sta_id AND use_user_type = 3")
+            elif user[0]['use_user_type'] == 2:
                 return render_template('private/administration.html', user = user, moderators = moderators, users = users)
             else:
                 return render_template('errors/403.html')
@@ -106,7 +103,7 @@ def user_admin():
     else:
         return render_template('errors/403.html')
 
-@users.route('/users/me/profile', methods = ['GET','PUT'])
+@users.route('/users/me/profile/', methods = ['GET','PUT'])
 def user_profile():
     if request.method == 'GET':
         if validate(get_token()):
@@ -138,10 +135,10 @@ def user_profile():
     else:
         return render_template('errors/403.html')
 
-@users.route('/users/me/adoptions')
+@users.route('/users/me/adoptions/')
 def user_adoptions():
     if validate(get_token()):
-        adoptions = select("SELECT use_name, pet_name, ast_detail, ado_pet_id, (SELECT pim_url FROM pet_image WHERE ado_pet_id = pim_pet_id) as pet_image FROM pet, user, adoption, adoption_state WHERE use_id = ado_user_request and pet_id = ado_pet_id and ast_id = ado_state ORDER BY ado_updated DESC")
+        adoptions = select("SELECT use_name, pet_name, pst_detail, ado_pet_id, (SELECT pim_url FROM pet_image WHERE ado_pet_id = pim_pet_id) as pet_image, pet_race, pty_detail, pet_state FROM pet, pet_state, user, adoption, adoption_state, pet_type WHERE use_id = ado_user_request and use_id = %i and pet_id = ado_pet_id and pst_id = pet_state AND pty_id = pet_type GROUP BY ado_pet_id ORDER BY ado_updated DESC" % (get_user_id(get_token())))
         if request_wants_json():
             return format_json(adoptions)
         else:
@@ -150,7 +147,7 @@ def user_adoptions():
     else:
         return render_template('errors/403.html')
 
-@users.route('/users/me/pets')
+@users.route('/users/me/pets/')
 def user_pets():
     if validate(get_token()):
         pets = select("SELECT pet_id, pet_name, pet_user_id, pet_age, pet_state, pst_detail, pty_detail, pet_race, pet_created, pet_updated, pet_description, (SELECT pim_url FROM pet_image WHERE pim_pet_id = pet_id LIMIT 1) as pet_image FROM pet, pet_state, pet_type WHERE pet_user_id = %i AND pet_state = pst_id AND pet_type = pty_id" % (get_user_id(get_token())))
@@ -158,7 +155,7 @@ def user_pets():
             return format_json(pets)
         else:
             user = select("SELECT use_name, use_user_type FROM user WHERE use_id = %s" % (get_user_id(get_token())))
-            return render_template('private/mypets.html', user = user, pets = pets)
+            return render_template('private/mypets.html', user = user, pets = pets, script = ['js/private/mypets.js'])
     else:
         return return_forbidden()
 

@@ -1,7 +1,8 @@
 from flask import(
     json,
     Response,
-    request
+    request,
+    render_template
 )
 
 def format_json(result, code = 200):

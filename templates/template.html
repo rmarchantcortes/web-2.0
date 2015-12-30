@@ -55,6 +55,9 @@
                     <li>
                         <ul id='dropdown2' class='dropdown-content'>
                             <li><a href="{{ url_for('users.user_admin') }}">Usuarios</a></li>
+                            {% if user[0]['use_user_type'] == 1 %}
+                            <li><a href="{{ url_for('pets.get_pets_types') }}">Especies</a></li>
+                            {% endif %}
                         </ul>
                     </li>
                     </li>

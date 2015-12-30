@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+{% block wrapper %}
+<div class="container">
+    <div class="row">
+        <h5 class="left">Especies</h5>
+        <a class="waves-effect waves-light btn right modal-trigger" href="#new-specie-modal"><i class="material-icons left">add</i> Agregar especie</a>
+    </div>
+    <ul class="collection">
+        {% for specie in species %}
+        <li class="collection-item" id="{{ specie['pty_id'] }}">{{ specie['pty_detail'] }}</li>
+        {% endfor %}
+    </ul>
+    <div id="new-specie-modal" class="modal">
+        <div class="modal-content">
+            <h5>Añadir una nueva especie</h5>
+            <p>
+            <div class="input-field col s12">
+                <label for="specie-name">Nombre de la especie</label>
+                <input name="specie-name" type="text" class="validate">
+            </div>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" id="add">Añadir</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

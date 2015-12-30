@@ -1,13 +1,20 @@
 $(document).ready(function(){
-    $.get(BASE_URL+'/pets/types/', function(data, textStatus, jqXHR){
-        if (jqXHR.status == 200){
-            $.each(data.data, function(index, value){
-                if ($('select[name=type]').attr('selection') == value.pty_id) var option = "<option value='"+value.pty_id+"' selected>"+value.pty_detail+"</option>";
-                else var option = "<option value='"+value.pty_id+"'>"+value.pty_detail+"</option>";
-                $('select[name=type]').append(option);
-            });
-            $('select').material_select();
-        }        
+    $.ajax({
+        url: BASE_URL+'/pets/types/', 
+        type: 'GET',
+        headers: {          
+            Accept : "application/json"
+        },
+        success: function(data, textStatus, jqXHR){
+            if (jqXHR.status == 200){
+                $.each(data.data, function(index, value){
+                    if ($('select[name=type]').attr('selection') == value.pty_id) var option = "<option value='"+value.pty_id+"' selected>"+value.pty_detail+"</option>";
+                    else var option = "<option value='"+value.pty_id+"'>"+value.pty_detail+"</option>";
+                    $('select[name=type]').append(option);
+                });
+                $('select').material_select();
+            }
+        }
     });
     
     $.get(BASE_URL+'/pets/'+$('#data').attr('pet_id')+'/images/', function(data, textStatus, jqXHR){

@@ -9,18 +9,19 @@
     <ul class="collection">
         {% for pet in pets %}
         
-        <li class="collection-item avatar">
+        <li class="collection-item avatar" id="{{ pet['pet_id'] }}">
             <img src="{% if pet['pet_image'] %} {{ url_for('static', filename='images/'+pet['pet_image']) }} {% endif %}" alt="" class="circle">
-            <span class="title"><a href="{{url_for('pets.get_pet', pet_id=pet['pet_id'])}}" class="link">{{ pet['pet_name'] }}</a> - </span>
+            <span class="title"><a href="{% if pet['pet_state'] == 6 or pet['pet_state'] == 5 %} {{url_for('pets.adopt_pet', pet_id=pet['pet_id']) }} {% else %} {{url_for('pets.get_pet', pet_id=pet['pet_id'])}} {% endif %}" class="link">{{ pet['pet_name'] }} </a> - </span>
             <span class="state">{{ pet['pst_detail'] }}</span>
             <p>{{ pet['pty_detail'] }} - Raza {{ pet['pet_race'] }}<br>
                 {{ pet['pet_description'] }}
             </p>
+            {% if pet['pet_state'] != 4 and  pet['pet_state'] != 5 and pet['pet_state'] != 6 %}
             <div class="secondary-content">
                 <a href="{{ url_for('pets.edit_pet', pet_id=pet['pet_id']) }}" class="link"><i class="material-icons">edit</i></a>
-                <a href="#!" class="link"><i class="material-icons">delete</i></a>
+                <a class="link modal-trigger delete-btn" href="#delete-modal"><i class="material-icons">delete</i></a>
             </div>
-            
+            {% endif %}
         </li>
         
         {% endfor %}
@@ -28,6 +29,15 @@
     {% else %}
     <h6>Aun no ofreces mascotas para que sean adoptadas.</h6>
     {% endif %}
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <h5>¿Está seguro de eliminar a esta mascota?</h5>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" id="delete-pet">Si, estoy seguro</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">No, no estoy seguro</a>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

@@ -1,7 +1,29 @@
 {% extends "template.html" %}
 {% block wrapper %}
 <div class="container">
-    <h4>{{ pet['pet_name'] }}</h4>
+    <div class="row">
+        <div class="col s12 m6 left"><h4>{{ pet['pet_name'] }}</h4></div>
+        
+        {% if user[0]['use_user_type'] < 3 or user[0]['use_id'] == pet['pet_user_id'] %}
+        <div class="col s12 m4 right">
+            <div class="col s8">
+                <div class="switch">
+                    <label>
+                        Oculto
+                        {% if pet['pet_state'] == 3 %}
+                        <input name="visibility" type="checkbox">
+                        {% else %}
+                        <input name="visibility" type="checkbox" checked>
+                        {% endif %}
+                        <span class="lever"></span>
+                        Visible
+                    </label>
+                </div>
+            </div>
+            <div class="col s4"><a class="modal-trigger" href="#delete-modal"><i class="material-icons left">delete</i></a></div>
+        </div>
+        {% endif %}
+    </div>
     <div class="row">
         <div class="col s12 m7">
             <div class="slider">
@@ -23,7 +45,7 @@
                 <div class="col s12">Dueño</div>
                 {% if not user or pet['pet_user_id'] != user[0]['use_id'] %}
                 <a class="waves-effect waves-light btn modal-trigger" href="#message-modal"><i class="material-icons left">email</i>Contactar dueño</a>
-                <a class="waves-effect waves-light btn"><i class="material-icons left">pets</i>Adoptar mascota</a>            
+                <a class="waves-effect waves-light btn modal-trigger" href="#adopt-modal"><i class="material-icons left">pets</i>Adoptar mascota</a>            
                 {% else %}
                 <a class="waves-effect waves-light btn" href="{{ url_for('pets.edit_pet', pet_id = pet['pet_id'])}}"><i class="material-icons left">edit</i>Editar mascota</a>
                 {% endif %}
@@ -97,11 +119,15 @@
                 <li id="{{ question['que_id'] }}">
                     <div class="collapsible-header">
                         {{ question['que_question'] }} - {{ question['use_name'] }}
+                        {% if user[0]['use_user_type'] < 3 %}
+                        <a class="modal-trigger right delete-comment" href="#delete-comment-modal"><i class="material-icons left">delete</i></a>
+                        {% endif %}
                         {% if (pet['pet_user_id'] == user[0]['use_id']) %}
                         <a><i class="material-icons right reply">reply</i></a>
                         {% else %}
                         <a><i class="material-icons right reply">expand_more</i></a>
                         {% endif %}
+                        
                     </div>
                     <div class="collapsible-body">
                         {% if (pet['pet_user_id'] == user[0]['use_id']) %}
@@ -145,6 +171,33 @@
         <div class="modal-footer">
             <a class="waves-effect waves-green btn-flat" id="send-message">Enviar</a>
             <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        </div>
+    </div>
+    <div id="adopt-modal" class="modal">
+        <div class="modal-content">
+            <h5>¿Está seguro de querer adoptar a {{ pet['pet_name'] }}?</h5>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" id="adopt">Si, quiero adoptar</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">No, no estoy seguro</a>
+        </div>
+    </div>
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <h5>¿Está seguro de eliminar a {{ pet['pet_name'] }}?</h5>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" id="delete-pet">Si, estoy seguro</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">No, no estoy seguro</a>
+        </div>
+    </div>
+    <div id="delete-comment-modal" class="modal">
+        <div class="modal-content">
+            <h5>¿Está seguro de eliminar esta pregunta?</h5>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" id="delete-comment">Si, estoy seguro</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">No, no estoy seguro</a>
         </div>
     </div>
 </div>

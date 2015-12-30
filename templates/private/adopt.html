@@ -1,0 +1,76 @@
+{% extends "template.html" %}
+{% block wrapper %}
+<div class="container">
+    <div class="row">
+        <h5 class="left">Adoptar a {{ pet['pet_name'] }}</h5>
+        <div class="col s12">Estado de la adopción: {{ adoption['ast_detail'] }}</div>
+        <div class="col s12 progress">
+            <div class="determinate" style="width: {% if adoption['ast_id'] == 1 %} 50% {% else %} 100% {% endif %}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m4 center">
+            <div class="row">
+                <div class="col s12">
+                    <img class="circle image-responsive user-image" src="{{ url_for('static', filename='images/unknown-profile.png') }}">
+                </div>
+                <div class="col s12"><h5>{{ pet['use_name'] }}</h5></div>
+                <div class="col s12">Dueño</div>
+                <div class="col s12">{{ user2['use_email'] }}</div>
+                <div class="col s12">{{ user2['use_phone_number'] }}</div>
+            </div>
+        </div>
+        <div class="col s12 m4 center">
+            <div class="row">
+                <div class="col s12">
+                    <img class="circle" src="{{ url_for('static', filename='images/'+pet['pet_image']) }}">
+                </div>
+                <div class="col s12" id="name" pet_id="{{ pet['pet_id'] }}"><h5>{{ pet['pet_name'] }}</h5></div>
+            </div>
+        </div>
+        <div class="col s12 m4 center">
+            <div class="row">
+                <div class="col s12">
+                    <img class="circle image-responsive user-image" src="{{ url_for('static', filename='images/unknown-profile.png') }}">
+                </div>
+                <div class="col s12"><h5>{{ user3['use_name'] }}</h5></div>
+                <div class="col s12">Solicitante</div>
+                <div class="col s12">{{ user3['use_email'] }}</div>
+                <div class="col s12">{{ user3['use_phone_number'] }}</div>
+            </div>
+        </div>    
+    </div>
+    {% if adoption['ast_id'] == 1 %}
+    <div class="row">
+        <div class="col s12 m4 center">
+            <a class="waves-effect waves-light btn center modal-trigger" href="#cancel-modal"><i class="material-icons left">clear</i>Cancelar</a>
+        </div>
+        <div class="col s12 m4 center">&nbsp;</div>
+        <div class="col s12 m4 center">
+            {% if user[0]['use_id'] ==  user2['use_id'] %}
+            <a class="waves-effect waves-light btn center modal-trigger" href="#finish-modal"><i class="material-icons left">check</i>Finalizar</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    <div id="cancel-modal" class="modal">
+        <div class="modal-content">
+            <h5>¿Está seguro de querer cancelar la adopción?</h5>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat" id="cancel">Si, no quiero adoptar</a>
+            <a class="waves-effect waves-green btn-flat">No, quiero continuar con la adopción</a>
+        </div>
+    </div>
+    <div id="finish-modal" class="modal">
+        <div class="modal-content">
+            <h5>¿{{ pet['pet_name'] }} fue entregado asu nuevo dueño, concretando la adopción?</h5>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" id="finish">Si, finalizar la adopción</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
